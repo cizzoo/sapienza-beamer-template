@@ -1,5 +1,7 @@
 # Sapienza Beamer template
 
+[![Open in Overleaf](https://img.shields.io/badge/Open%20in-Overleaf-47A141?logo=overleaf&logoColor=white)](https://www.overleaf.com/docs?snip_uri=https://github.com/cizzoo/sapienza-beamer-template/archive/refs/heads/main.zip)
+
 A LaTeX Beamer theme for slides in the style of Sapienza University of Rome, with a **light** and a **dark** variant.
 
 > Unofficial. Not affiliated with or endorsed by Sapienza University of Rome.
@@ -64,7 +66,9 @@ Compile twice (`latexmk` does it for you): the overlays use `remember picture`.
 
 ## Overleaf
 
-The theme uses `fontspec`, which needs XeLaTeX or LuaLaTeX. Overleaf runs `latexmk -pdf`, which would start
+The template is ready to use right away, no setup needed: [open it in Overleaf](https://www.overleaf.com/docs?snip_uri=https://github.com/cizzoo/sapienza-beamer-template/archive/refs/heads/main.zip) and compile.
+
+How it works: the theme uses `fontspec`, which needs XeLaTeX or LuaLaTeX. Overleaf runs `latexmk -pdf`, which would start
 pdfLaTeX and stop with `Fatal Package fontspec Error`. The `latexmkrc` in this project fixes it by making the
 `pdflatex` command run XeLaTeX, so the project compiles with the default settings:
 
