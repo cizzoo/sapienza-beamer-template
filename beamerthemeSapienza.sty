@@ -77,6 +77,8 @@
   \renewcommand{\normalsize}{\sapfs{13}{16.5}}%
   \renewcommand{\small}{\sapfs{11}{14}}%
   \renewcommand{\footnotesize}{\sapfs{9}{11}}%
+  \newcommand{\sapMS}[2]{\DeclareMathSizes{\strip@pt\dimexpr#1\sapPt\relax}{\strip@pt\dimexpr#1\sapPt\relax}{\strip@pt\dimexpr#2\sapPt\relax}{5}}%
+  \sapMS{13}{9.1}\sapMS{11}{7.7}\sapMS{9}{6.3}\sapMS{16}{11.2}\sapMS{20}{14}%
   \renewcommand{\large}{\sapfs{16}{20}}%
   \renewcommand{\Large}{\sapfs{20}{24}}%
   \normalsize}
@@ -154,7 +156,7 @@
 %% ---- frame title (content slides)
 \setbeamertemplate{frametitle}{%
   \vbox to 1.774\sapU{\vskip 1.0\sapU
-    \hbox to \textwidth{\parbox[t]{8.4\sapU}{\usebeamercolor[fg]{frametitle}\sapfs{26}{30}\bfseries\insertframetitle}}\vss}}
+    \hbox to \textwidth{\parbox[t]{8.4\sapU}{\usebeamercolor[fg]{frametitle}\sapfs{26}{30}\bfseries\insertframetitle}\hfil}\vss}}
 
 %% ---- title page (and closing slide): \titlepage in a [plain] frame
 \setbeamertemplate{title page}{%
