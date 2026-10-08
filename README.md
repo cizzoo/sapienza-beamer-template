@@ -68,6 +68,8 @@ Compile twice (`latexmk` does it for you): the overlays use `remember picture`.
 
 The template is ready to use right away, no setup needed: [open it in Overleaf](https://www.overleaf.com/docs?snip_uri=https://github.com/cizzoo/sapienza-beamer-template/archive/refs/heads/main.zip) and compile.
 
+> If you work only on Overleaf, files such as the `Makefile` are not needed. They are handy if you also want to work locally, kept in sync with Overleaf through git or other tools.
+
 How it works: the theme uses `fontspec`, which needs XeLaTeX or LuaLaTeX. Overleaf runs `latexmk -pdf`, which would start
 pdfLaTeX and stop with `Fatal Package fontspec Error`. The `latexmkrc` in this project fixes it by making the
 `pdflatex` command run XeLaTeX, so the project compiles with the default settings:
