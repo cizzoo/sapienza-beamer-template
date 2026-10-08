@@ -1,0 +1,315 @@
+% !TEX program = xelatex
+% Documentation deck: every feature of the Sapienza Beamer theme, explained in the slides.
+% Build with XeLaTeX:  make example   (light and dark variants)
+\providecommand{\sapvariant}{light}   % light | dark
+\documentclass[t,aspectratio=169]{beamer}
+\usetheme[\sapvariant]{Sapienza}
+\usepackage{booktabs}
+
+\title[Sapienza Beamer Theme]{Sapienza Beamer theme}
+\subtitle{Documentation and examples}
+\author[Your Name]{Your Name - ID}
+\institute{Sapienza University of Rome}
+\date{}
+
+% small helper to show source code in the slides (no verbatim, so frames stay non-fragile)
+\newcommand{\code}[1]{{\ttfamily\small #1}}
+
+\begin{document}
+
+%% ------------------------------------------------------------------ title
+\begin{frame}[plain]\titlepage\end{frame}
+
+\begin{frame}{Credits}
+  This theme is a LaTeX Beamer port of the \textbf{Sapienza PPT template} by Pietro Nardelli,
+  inspired by the Sapienza NLP Group.
+  \vspace{0.8em}
+  \begin{itemize}
+    \item \textbf{Original template:} \url{https://github.com/pietro-nardelli/sapienza-ppt-template}
+    \item \textbf{Original author:} Pietro Nardelli
+    \item \textbf{License:} {\itshape Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)}
+    \item \textbf{Note:} unofficial, not endorsed by Sapienza University of Rome
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \sapToc{Contents}{Getting started,Slide types,Content blocks,Custom components,Positioning,Reference}
+\end{frame}
+
+%% ------------------------------------------------------------------ 1. getting started
+\begin{frame}{1. Getting started}
+  \begin{itemize}
+    \item Compile with \textbf{XeLaTeX} or LuaLaTeX: the theme uses \code{fontspec}
+    \item Copy \code{beamerthemeSapienza.sty}, \code{fonts/} and \code{img/} next to your \code{.tex}
+    \item Use \code{make} for both variants, or run \code{latexmk -xelatex}
+    \item Run twice: the overlays use \code{remember picture} (latexmk does it for you)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Minimal document}
+  \small
+  \begin{itemize}
+    \item \code{\textbackslash documentclass[t,aspectratio=169]\{beamer\}}
+    \item \code{\textbackslash usetheme[light]\{Sapienza\}} \hfill (or \code{[dark]})
+    \item \code{\textbackslash title[Short]\{Long title\}}, \code{\textbackslash author[Short]\{Full name\}}
+    \item \code{\textbackslash subtitle}, \code{\textbackslash institute}
+  \end{itemize}
+  \vspace{0.6em}
+  Use the class option \code{t}: it aligns frame content to the top, as in the original template.
+  The short title and short author are printed in the footer.
+\end{frame}
+
+\begin{frame}{Light and dark variants}
+  The variant is a theme option: \code{\textbackslash usetheme[dark]\{Sapienza\}}.
+  Colours are defined once and switch with the option.
+  \vspace{0.8em}
+  \begin{itemize}
+    \item \textbf{Accents} (same in both): teal \code{\#006778}, burgundy \code{\#6F0A19}
+    \item \textbf{Light}: white background, grey text \code{\#595959}, banner \code{\#E9EDEE}
+    \item \textbf{Dark}: background \code{\#353535}, text \code{\#E9EDEE}, banner \code{\#595959}
+  \end{itemize}
+  \vspace{0.6em}
+  To pick the variant from the command line, define \code{\textbackslash sapvariant} before the
+  document class, as this deck does (see the Makefile).
+\end{frame}
+
+%% ------------------------------------------------------------------ 2. slide types
+\begin{frame}[plain]
+  \sapSection{2. Slide types}{Five layouts, as in the PPT template}{%
+    \textbf{Title slide}: \code{\textbackslash titlepage} in a \code{[plain]} frame.\par\medskip
+    \textbf{Table of contents}: \code{\textbackslash sapToc}.\par\medskip
+    \textbf{Content slide}: a normal \code{frame} with a title.\par\medskip
+    \textbf{Section slide}: \code{\textbackslash sapSection}, the one you are looking at.\par\medskip
+    \textbf{Closing slide}: \code{\textbackslash sapClosing}.}
+\end{frame}
+
+\begin{frame}{Title slide}
+  \small
+  \code{\textbackslash begin\{frame\}[plain]\textbackslash titlepage\textbackslash end\{frame\}}
+  \vspace{0.6em}
+  \begin{itemize}
+    \item Title comes from \code{\textbackslash title}
+    \item The three lines below are \code{\textbackslash author}, \code{\textbackslash subtitle} and \code{\textbackslash institute}
+    \item Use \code{\textbackslash\textbackslash} inside \code{\textbackslash author} to add more lines
+    \item The frame must be \code{[plain]}: no title bar, no footer
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Table of contents}
+  \small
+  \code{\textbackslash sapToc\{Contents\}\{Section 1,Section 2,...\}}
+  \vspace{0.6em}
+  \begin{itemize}
+    \item First argument: the slide title. Second: a comma-separated list of entries
+    \item Entries are numbered automatically, two columns, row by row
+    \item Up to six entries fit the original grid; use it inside a \code{[plain]} frame
+    \item Separators alternate burgundy (left column) and teal (right column)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Content slide}
+  A normal frame: \code{\textbackslash begin\{frame\}\{Title\}}. The title is 26\,pt bold, with the two
+  accent bars above it. The body starts below the title and stops above the footer, which shows
+  the short title, the short author and the slide number.
+  \vspace{0.8em}
+  \begin{itemize}
+    \item The grey-blue banner on top and the burgundy corner with the logo are drawn by the theme
+    \item Body text is 13\,pt, lists use grey dashes
+    \item Body width matches the original placeholder (8.4 in on a 10 in slide)
+  \end{itemize}
+\end{frame}
+
+%% ------------------------------------------------------------------ 3. content blocks
+\begin{frame}{3. Lists}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Itemize}
+      \begin{itemize}
+        \item First level
+          \begin{itemize}
+            \item Second level
+              \begin{itemize}\item Third level\end{itemize}
+          \end{itemize}
+        \item Another item
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Enumerate}
+      \begin{enumerate}
+        \item First step
+        \item Second step
+        \item Third step
+      \end{enumerate}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Text, links and math}
+  Regular text, \textbf{bold}, \emph{emphasis} and a link: \url{https://github.com/pietro-nardelli/sapienza-ppt-template}.
+  \vspace{0.8em}
+  Inline math $e^{i\pi}+1=0$ and a displayed equation:
+  \[
+    \mathcal{L}(\theta)=-\frac{1}{N}\sum_{i=1}^{N}\log p_\theta(y_i\mid x_i)
+  \]
+  Links are blue (\code{\#1C3678}) in the light variant and cyan in the dark one.
+\end{frame}
+
+\begin{frame}{Tables}
+  \centering
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{F1} \\
+    \midrule
+    Baseline & 71.2 & 69.8 \\
+    Ours     & 78.5 & 77.1 \\
+    \bottomrule
+  \end{tabular}
+  \vspace{1em}
+
+  Use \code{booktabs} (load it in your preamble) for clean rules; colours follow the theme.
+\end{frame}
+
+\begin{frame}{Incremental reveal}
+  Standard Beamer overlays work as usual:
+  \begin{itemize}
+    \item<1-> \code{\textbackslash item<1->} appears on the first click
+    \item<2-> \code{\textbackslash item<2->} appears on the second
+    \item<3-> and \code{\textbackslash pause}, \code{\textbackslash only}, \code{\textbackslash uncover} are available too
+  \end{itemize}
+  The slide number keeps counting frames, not overlays.
+\end{frame}
+
+%% ------------------------------------------------------------------ 4. custom components
+\begin{frame}{4. Bad / Good comparison}
+  \small
+  \code{\textbackslash sapCompare\{\}\{y\}\{bad text\}\{good text\}}: \code{y} is the distance of the top of the boxes from the top
+  of the slide, in inches of the original 10\,x\,5.625\,in slide.
+  \sapCompare{}{3.4}%
+    {A bad example: dense text, no structure, hard to read from the back of the room.}%
+    {A good example: short sentences, one idea per slide, large and readable text.}
+\end{frame}
+
+\begin{frame}{Timeline}
+  \sapAt[text width=8.4in]{0.798}{1.55}{\footnotesize\code{\textbackslash sapTimeline\{T1\}\{desc 1\}\{T2\}\{desc 2\}\{T3\}\{desc 3\}}: three milestones, the middle one hangs below the line.}
+  \sapTimeline{Time 1}{First milestone of the project}%
+              {Time 2}{Second milestone, described below the line in a wider box}%
+              {Time 3}{Final milestone}
+\end{frame}
+
+\begin{frame}[plain]
+  \sapSection{Section slide}{Subtitle goes here}{%
+    \code{\textbackslash sapSection\{Title\}\{Subtitle\}\{Body\}} builds a split slide: title and
+    subtitle on the left half, free body text on the right.\par\medskip
+    It must be used inside a \code{[plain]} frame. The body is 11\,pt and may contain
+    any text: lists, links or math.\par\medskip
+    In the dark variant the right half is lighter grey.}
+\end{frame}
+
+%% ------------------------------------------------------------------ 5. positioning
+\begin{frame}{5. Absolute positioning}
+  \small
+  \code{\textbackslash sapAt[options]\{x\}\{y\}\{text\}} puts a TikZ node with its top-left corner at $(x,y)$.
+  Units are inches of the original slide (10\,x\,5.625), origin top-left, $y$ pointing down.
+  \sapAt[text width=3cm,draw=sapTeal,inner sep=4pt]{1.0}{2.7}{Box at (1.0, 2.7) with a teal border.}
+  \sapAt[text width=3.2cm,fill=sapBurg,text=white,inner sep=4pt]{4.5}{2.7}{Box at (4.5, 2.7) with a burgundy fill.}
+  \sapAt[text width=3cm,text=sapGray]{7.5}{3.2}{Plain text at (7.5, 3.2).}
+\end{frame}
+
+\begin{frame}{Coordinates scale with the page}
+  \begin{itemize}
+    \item All positions are relative to the page width: \code{\textbackslash sapU} = 1 in of the original slide
+    \item Font sizes use \code{\textbackslash sapfs\{size\}\{leading\}}, e.g.\ \code{\textbackslash sapfs\{26\}\{30\}} for a title
+    \item So the theme works at any \code{aspectratio=169} paper size, not only 10 in wide
+    \item For your own drawings use \code{sapcanvas}: a TikZ scope in the same units
+  \end{itemize}
+\end{frame}
+
+%% ------------------------------------------------------------------ 6. reference
+\begin{frame}{6. Colours and fonts}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Colours} (usable in any TikZ/xcolor command)
+      \begin{itemize}
+        \item \textcolor{sapTeal}{\code{sapTeal}}, \textcolor{sapBurg}{\code{sapBurg}}
+        \item \code{sapGray}, \code{sapSilver}
+        \item \code{sapBg}, \code{sapText}, \code{sapTitle}: they change with the variant
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Fonts}
+      \begin{itemize}
+        \item Catamaran: titles and body
+        \item {\sapRaleway Raleway}: table of contents (\code{\textbackslash sapRaleway})
+        \item Files are loaded from \code{fonts/}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Command summary}
+  \small
+  \begin{tabular}{@{}ll@{}}
+    \code{\textbackslash titlepage} & title slide\\
+    \code{\textbackslash sapToc\{title\}\{a,b,c\}} & table of contents\\
+    \code{\textbackslash sapSection\{t\}\{sub\}\{body\}} & split section slide\\
+    \code{\textbackslash sapCompare\{\}\{y\}\{bad\}\{good\}} & Bad / Good boxes\\
+    \code{\textbackslash sapTimeline} & three-point timeline\\
+    \code{\textbackslash sapClosing\{text\}} & closing slide\\
+    \code{\textbackslash sapAt[opts]\{x\}\{y\}\{text\}} & absolute text box\\
+    \code{sapcanvas} & TikZ scope in slide inches\\
+  \end{tabular}
+\end{frame}
+
+%% ------------------------------------------------------------------ technical notes
+\begin{frame}{Technical notes: files and units}
+  \small
+  \begin{itemize}
+    \item \code{beamerthemeSapienza.sty}: the whole theme (colours, fonts, templates, components)
+    \item \code{fonts/}: Catamaran (\code{.ttf}) and Raleway (\code{.otf}), loaded by \code{fontspec} with \code{Path=fonts/}
+    \item \code{img/}: logos, four PNGs (\code{logo\_small|big\_light|dark})
+    \item \code{\textbackslash sapU} = page width / 10: one inch of the original 10\,x\,5.625\,in slide
+    \item \code{\textbackslash sapPt} = page width / 722: one point of the original slide
+    \item \code{\textbackslash sapfs\{s\}\{l\}} sets font size and leading in \code{\textbackslash sapPt}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Technical notes: how a slide is drawn}
+  \small
+  \begin{itemize}
+    \item \code{\textbackslash sapmode} (\code{content}, \code{title}, \code{toc}, \code{section}) is reset to \code{content} at each frame start
+    \item \code{background canvas} paints the fills: body, grey banner, split halves of section slides
+    \item \code{background} paints bars, corner block with logo, footer text and slide number
+    \item Both use \code{sapcanvas}: a TikZ overlay with \code{remember picture}, origin at the page top-left
+    \item This is why two compilation runs are needed: the first one stores the node positions
+    \item The frame title is a fixed-height box, so the body always starts at the same height
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Technical notes: customisation}
+  \small
+  \begin{itemize}
+    \item Colours: change the \code{\textbackslash definecolor} lines of the \code{.sty}, one block per variant
+    \item List markers: \code{\textbackslash setbeamertemplate\{itemize item\}} (grey dash, same for all levels)
+    \item Margins: \code{text margin left/right} = 0.798\,in of the original slide
+    \item Font sizes: \code{\textbackslash normalsize} 13\,pt, \code{\textbackslash small} 11\,pt, \code{\textbackslash footnotesize} 9\,pt
+    \item Requirements: XeLaTeX or LuaLaTeX, \code{tikz}, \code{fontspec}, \code{xcolor}, \code{etoolbox}
+    \item Aspect ratio: designed for \code{aspectratio=169}; other ratios are not supported
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+  \begin{itemize}
+    \item \textbf{Template:}
+      \begin{itemize}\item \url{https://github.com/pietro-nardelli/sapienza-ppt-template}\end{itemize}
+    \item \textbf{License:}
+      \begin{itemize}\item {\itshape Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)}\end{itemize}
+    \item \textbf{Fonts:}
+      \begin{itemize}\item Catamaran and Raleway, SIL Open Font License\end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \sapClosing{Thank you for the attention!}
+\end{frame}
+
+\end{document}

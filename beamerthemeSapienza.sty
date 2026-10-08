@@ -1,0 +1,237 @@
+%% Sapienza Beamer theme -- port of the Sapienza PPT template (light / dark).
+%% Requires XeLaTeX or LuaLaTeX (fontspec). Use: \usetheme[light]{Sapienza} or [dark].
+%% License: CC BY-NC-SA 4.0 (same as the original template).
+\ProvidesPackage{beamerthemeSapienza}[2026/10/07 Sapienza Beamer theme]
+\mode<presentation>
+
+\RequirePackage{tikz}
+\RequirePackage{fontspec}
+\RequirePackage{xcolor}
+
+\newif\ifsapdark
+\DeclareOptionBeamer{light}{\sapdarkfalse}
+\DeclareOptionBeamer{dark}{\sapdarktrue}
+\ProcessOptionsBeamer
+
+%% ---- units: 1 \sapU = 1 inch of the original 10in x 5.625in slide, 1 \sapPt = 1pt of it
+\newlength{\sapU}\setlength{\sapU}{\dimexpr\paperwidth/10\relax}
+\newlength{\sapPt}\setlength{\sapPt}{\dimexpr\paperwidth/722\relax}
+\newcommand{\sapfs}[2]{\fontsize{#1\sapPt}{#2\sapPt}\selectfont}
+
+%% ---- colours
+\definecolor{sapTeal}{HTML}{006778}
+\definecolor{sapBurg}{HTML}{6F0A19}
+\definecolor{sapGray}{HTML}{595959}
+\definecolor{sapSilver}{HTML}{E9EDEE}
+\newcommand{\saplogoalpha}{0.35}
+\ifsapdark
+  \renewcommand{\saplogoalpha}{0.18}
+  \definecolor{sapBg}{HTML}{353535}
+  \definecolor{sapBanner}{HTML}{595959}
+  \definecolor{sapAlt}{HTML}{353535}   % left half of section slide
+  \definecolor{sapAltR}{HTML}{595959}  % right half of section slide
+  \definecolor{sapText}{HTML}{E9EDEE}
+  \definecolor{sapTitle}{HTML}{FFFFFF}
+  \definecolor{sapLink}{HTML}{00FFFF}
+  \newcommand{\saplogobig}{img/logo_big_dark.png}
+  \newcommand{\saplogosmall}{img/logo_small_dark.png}
+  \newcommand{\sapMix}[1]{#1!45!sapBg}
+  \definecolor{sapBoxText}{HTML}{E9EDEE}
+  \definecolor{sapLabelFill}{HTML}{353535}
+\else
+  \definecolor{sapBg}{HTML}{FFFFFF}
+  \definecolor{sapBanner}{HTML}{E9EDEE}
+  \definecolor{sapAlt}{HTML}{E9EDEE}
+  \definecolor{sapAltR}{HTML}{FFFFFF}
+  \definecolor{sapText}{HTML}{595959}
+  \definecolor{sapTitle}{HTML}{1A1A1A}
+  \definecolor{sapLink}{HTML}{1C3678}
+  \newcommand{\saplogobig}{img/logo_big_light.png}
+  \newcommand{\saplogosmall}{img/logo_small_light.png}
+  \newcommand{\sapMix}[1]{#1!40!sapBg}
+  \definecolor{sapBoxText}{HTML}{3A3A3A}
+  \definecolor{sapLabelFill}{HTML}{E9EDEE}
+\fi
+% title / table-of-contents slides: tinted body + opposite banner
+\ifsapdark
+  \colorlet{sapBodyAlt}{sapBg}\colorlet{sapBannerAlt}{sapBanner}
+\else
+  \colorlet{sapBodyAlt}{sapSilver}\colorlet{sapBannerAlt}{white}
+\fi
+\setbeamercolor{normal text}{fg=sapText,bg=sapBg}
+\setbeamercolor{structure}{fg=sapBurg}
+\setbeamercolor{frametitle}{fg=sapTitle}
+\setbeamercolor{title}{fg=sapTitle}
+\setbeamercolor{item}{fg=sapText}
+\setbeamercolor{palette primary}{fg=sapText,bg=sapBg}
+\hypersetup{colorlinks=true,urlcolor=sapLink,linkcolor=sapText}
+
+%% ---- fonts
+\setmainfont{Catamaran}[Path=fonts/,Extension=.ttf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Regular,BoldItalicFont=*-Bold,FontFace={it}{n}{*-Regular}]
+\setsansfont{Catamaran}[Path=fonts/,Extension=.ttf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Regular,BoldItalicFont=*-Bold]
+\newfontfamily\sapRaleway{Raleway}[Path=fonts/,Extension=.otf,UprightFont=*-Regular,BoldFont=*-Bold]
+\newfontfamily\sapRalewayLight{Raleway}[Path=fonts/,Extension=.otf,UprightFont=*-Light,BoldFont=*-Bold]
+\usefonttheme{professionalfonts}
+\renewcommand{\familydefault}{\sfdefault}
+\AtBeginDocument{%
+  \renewcommand{\normalsize}{\sapfs{13}{16.5}}%
+  \renewcommand{\small}{\sapfs{11}{14}}%
+  \renewcommand{\footnotesize}{\sapfs{9}{11}}%
+  \renewcommand{\large}{\sapfs{16}{20}}%
+  \renewcommand{\Large}{\sapfs{20}{24}}%
+  \normalsize}
+
+%% ---- layout
+\setbeamersize{text margin left=0.798\sapU,text margin right=0.798\sapU}
+\setbeamertemplate{navigation symbols}{}
+\hyphenpenalty=10000 \exhyphenpenalty=10000
+\urlstyle{same}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{\vbox to 1.0\sapU{}}
+\setbeamertemplate{itemize item}{\textcolor{sapText}{--}}
+\setbeamertemplate{itemize subitem}{\textcolor{sapText}{--}}
+\setbeamertemplate{itemize subsubitem}{\textcolor{sapText}{--}}
+\setbeamertemplate{blocks}[default]
+
+%% slide kind: content (default) | title | toc | section; reset at each frame start
+\gdef\sapmode{content}
+\RequirePackage{etoolbox}
+\AtBeginEnvironment{frame}{\gdef\sapmode{content}}
+
+% absolute drawing in original-slide inches, origin top-left, y down
+\newenvironment{sapcanvas}{\begin{tikzpicture}[remember picture,overlay]
+  \begin{scope}[shift={(current page.north west)},x=\sapU,y=-\sapU]}%
+  {\end{scope}\end{tikzpicture}}
+\newcommand{\sapAt}[4][]{% [opts]{x}{y}{text} -- text box with top-left corner at (x,y)
+  \begin{sapcanvas}\node[anchor=north west,inner sep=0pt,align=left,#1] at (#2,#3) {#4};\end{sapcanvas}}
+
+\newcommand{\sapBars}[4]{% x y barwidth barheight : teal+burgundy bars
+  \fill[sapTeal] (#1,#2) rectangle ++(#3,#4);
+  \fill[sapBurg] (#1+#3,#2) rectangle ++(#3,#4);}
+
+%% ---- background
+\setbeamertemplate{background canvas}{%
+  \begin{sapcanvas}
+    \ifx\sapmode\sapmode@section
+      \fill[sapAlt] (0,0) rectangle (5,5.625);
+      \fill[sapAltR] (5,0) rectangle (10,5.625);
+    \else
+      \ifx\sapmode\sapmode@content
+        \fill[sapBg] (0,0) rectangle (10,5.625);
+        \fill[sapBanner] (0,0) rectangle (10,0.5335);
+      \else
+        \fill[sapBodyAlt] (0,0) rectangle (10,5.625);
+        \fill[sapBannerAlt] (0,0) rectangle (10,0.5335);
+      \fi
+    \fi
+  \end{sapcanvas}}
+\def\sapmode@content{content}\def\sapmode@section{section}
+\def\sapmode@title{title}\def\sapmode@toc{toc}
+
+%% ---- foreground: bars, logo, footer, slide number
+\newcommand{\sap@cornerblock}{%
+  \fill[sapBurg] (0,4.516) -- (0,5.625) -- (1.451,5.625) -- cycle;
+  \node[anchor=center,inner sep=0pt] at (0.37,5.33) {\includegraphics[height=0.53\sapU]{\saplogosmall}};
+  \node[anchor=west,inner sep=0pt,text=sapText] at (1.547,5.41) {\sapfs{9}{11}\insertshorttitle\ -- \insertshortauthor};}
+\newcommand{\sap@number}{%
+  \node[anchor=east,inner sep=0pt,text=sapText] at (9.84,5.39) {\sapfs{9}{11}\insertframenumber};}
+\setbeamertemplate{background}{%
+  \begin{sapcanvas}
+    \ifx\sapmode\sapmode@title
+      \node[anchor=north west,inner sep=0pt,opacity=\saplogoalpha] at (6.845,2.683)
+        {\includegraphics[width=3.155\sapU,height=2.942\sapU]{\saplogobig}};
+    \fi
+    \ifx\sapmode\sapmode@toc
+      \node[anchor=north west,inner sep=0pt,opacity=\saplogoalpha] at (8.664,2.633)
+        {\includegraphics[width=1.943\sapU,height=1.812\sapU]{\saplogobig}};
+      \sap@number
+    \fi
+    \ifx\sapmode\sapmode@content \sapBars{0.906}{0.803}{0.408}{0.05}\sap@cornerblock\sap@number\fi
+    \ifx\sapmode\sapmode@section \sapBars{0.906}{0.803}{0.408}{0.05}\sap@cornerblock\sap@number\fi
+    \ifx\sapmode\sapmode@toc \sapBars{0.906}{0.803}{0.408}{0.05}\fi
+  \end{sapcanvas}}
+
+%% ---- frame title (content slides)
+\setbeamertemplate{frametitle}{%
+  \vbox to 1.774\sapU{\vskip 1.0\sapU
+    \hbox to \textwidth{\parbox[t]{8.4\sapU}{\usebeamercolor[fg]{frametitle}\sapfs{26}{30}\bfseries\insertframetitle}}\vss}}
+
+%% ---- title page (and closing slide): \titlepage in a [plain] frame
+\setbeamertemplate{title page}{%
+  \gdef\sapmode{title}%
+  \begin{sapcanvas}
+    \sapBars{0.908}{1.28}{0.6}{0.0965}
+    \node[anchor=north west,inner sep=0pt,text width=8.4\sapU,text=sapTitle]
+      at (0.798,1.62) {\sapfs{30}{34}\bfseries\inserttitle};
+    \node[anchor=north west,inner sep=0pt,text width=6\sapU,text=sapText]
+      at (0.798,3.58) {\sapfs{13}{17}\raggedright\insertauthor\\\insertsubtitle\\\insertinstitute};
+  \end{sapcanvas}}
+
+%% ---- closing slide (same layout as title page): \sapClosing{Thank you!}
+\newcommand{\sapClosing}[1]{%
+  \gdef\sapmode{title}%
+  \begin{sapcanvas}
+    \sapBars{0.908}{1.28}{0.6}{0.0965}
+    \node[anchor=north west,inner sep=0pt,text width=8.4\sapU,text=sapTitle]
+      at (0.798,1.62) {\sapfs{30}{34}\bfseries #1};
+  \end{sapcanvas}}
+
+%% ---- table of contents slide: \sapToc{Title}{Sec 1,Sec 2,...}
+\newcommand{\sapToc}[2]{%
+  \gdef\sapmode{toc}%
+  \begin{sapcanvas}
+    \node[anchor=north west,inner sep=0pt,text width=8.4\sapU,text=sapTitle]
+      at (0.798,1.0) {\sapfs{26}{30}\bfseries #1};
+    \foreach \s [count=\i from 0] in {#2} {%
+      \pgfmathtruncatemacro{\col}{mod(\i,2)}%
+      \pgfmathtruncatemacro{\row}{int(\i/2)}%
+      \pgfmathsetmacro{\bx}{0.38+\col*4.177}%
+      \pgfmathsetmacro{\by}{2.169+\row*1.035}%
+      \pgfmathtruncatemacro{\num}{\i+1}%
+      \node[anchor=center,inner sep=0pt,text=sapTitle] at (\bx+0.505,\by+0.46)
+        {\sapRalewayLight\sapfs{44}{48}\num};
+      \ifnum\col=0 \fill[sapBurg] (\bx+1.17,\by) rectangle ++(0.029,0.86);
+      \else \fill[sapTeal] (\bx+1.17,\by) rectangle ++(0.029,0.86);\fi
+      \node[anchor=west,inner sep=0pt,text=sapText] at (\bx+1.352,\by+0.33)
+        {\sapRaleway\sapfs{13}{16}\s};
+    }
+  \end{sapcanvas}}
+
+%% ---- section slide: \sapSection{Title}{Subtitle}{Body}
+\newcommand{\sapSection}[3]{%
+  \gdef\sapmode{section}%
+  \sapAt[text width=3.61\sapU,text=sapTitle]{0.842}{1.009}{\sapfs{26}{32}\bfseries #1}%
+  \sapAt[text width=3.61\sapU,text=sapText]{0.842}{2.397}{\sapfs{16}{20}\raggedright #2}%
+  \sapAt[text width=3.69\sapU,text=sapText]{5.645}{0.909}{\sapfs{11}{14.5}\raggedright #3}}
+
+%% ---- Bad / Good comparison: \sapBadGood{x}{y}{bad text}{good text}
+\newcommand{\sapCompare}[4]{%
+  \begin{sapcanvas}
+    \foreach \lbl/\col/\xx/\txt in {Bad/sapBurg/1.38/{#3}, Good/sapTeal/5.12/{#4}} {%
+      \draw[draw=\col,line width=0.5pt,fill=sapLabelFill] (\xx+0.58,#2-0.22) rectangle ++(2.35,0.22);
+      \node[inner sep=0pt,text=sapBoxText] at (\xx+1.75,#2-0.11) {\sapfs{10}{12}\lbl};
+      \draw[\col,line width=0.5pt,fill=\sapMix{\col},rounded corners=0.14\sapU] (\xx,#2) rectangle ++(3.5,1.05);
+      \node[inner sep=0pt,text width=3.1\sapU,align=center,text=sapBoxText] at (\xx+1.75,#2+0.525)
+        {\sapfs{10}{13}\txt};
+    }
+  \end{sapcanvas}}
+
+%% ---- timeline: \sapTimeline{T1}{d1}{T2}{d2}{T3}{d3}
+\newcommand{\sapTimeline}[6]{%
+  \begin{sapcanvas}
+    \fill[sapGray] (2.07,3.31) rectangle (7.53,3.43);
+    \foreach \cx/\up/\colr in {3.03/1/sapBurg, 4.78/0/sapTeal, 6.53/1/sapBurg} {%
+      \ifnum\up=1
+        \fill[\colr] (\cx-0.44,3.37) arc (180:360:0.44) -- (\cx+0.19,3.37) arc (360:180:0.19) -- cycle;
+      \else
+        \fill[\colr] (\cx-0.44,3.37) arc (180:0:0.44) -- (\cx+0.19,3.37) arc (0:180:0.19) -- cycle;
+      \fi}
+    \node[inner sep=0pt,text=sapTitle] at (3.03,1.98) {\sapfs{13}{16}#1};
+    \node[inner sep=0pt,text width=1.5\sapU,align=center,text=sapText,anchor=north] at (3.03,2.22) {\sapfs{10}{13}#2};
+    \node[inner sep=0pt,text=sapTitle] at (4.78,4.33) {\sapfs{13}{16}#3};
+    \node[inner sep=0pt,text width=3.2\sapU,align=center,text=sapText,anchor=north] at (4.78,4.56) {\sapfs{10}{13}#4};
+    \node[inner sep=0pt,text=sapTitle] at (6.53,1.98) {\sapfs{13}{16}#5};
+    \node[inner sep=0pt,text width=1.5\sapU,align=center,text=sapText,anchor=north] at (6.53,2.22) {\sapfs{10}{13}#6};
+  \end{sapcanvas}}
+
+\mode<all>

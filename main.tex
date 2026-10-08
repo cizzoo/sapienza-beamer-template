@@ -1,0 +1,78 @@
+% !TEX program = xelatex
+% Compile with XeLaTeX:  make  (light and dark variants)
+\providecommand{\sapvariant}{light}   % light | dark
+\documentclass[t,aspectratio=169]{beamer}
+\usetheme[\sapvariant]{Sapienza}
+
+\title{Presentation title}
+\author{Name Surname - ID}
+\subtitle{Course name}
+\institute{Sapienza University of Rome}
+\date{}
+
+\newcommand{\lorem}{Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.}
+
+\begin{document}
+
+% shorter strings for the footer
+\title[Presentation Title]{Presentation title}
+\author[Name Surname]{Name Surname - ID}
+
+\begin{frame}[plain]\titlepage\end{frame}
+
+\begin{frame}[plain]
+  \sapToc{Table of contents}{Section 1,Section 2,Section 3,Section 4,Section 5,Section 6}
+\end{frame}
+
+\begin{frame}{Slide example 1}
+  \lorem
+\end{frame}
+
+\begin{frame}{Slide example with bullet list}
+  \begin{itemize}
+    \item Lorem ipsum dolor sit amet, consectetur adipisci elit
+    \item Sed eiusmod tempor incidunt ut labore et dolore magna aliqua
+      \begin{itemize}
+        \item Ut enim ad minim veniam
+        \item Quis nostrum exercitationem ullam corporis
+      \end{itemize}
+    \item Quis aute iure reprehenderit in voluptate velit esse
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Slide example 2}
+  \lorem
+  \sapCompare{}{3.83}%
+    {Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.}%
+    {Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.}
+\end{frame}
+
+\begin{frame}[plain]
+  \sapSection{Slide example with subtitle}{Lorem ipsum dolor sit amet}{\lorem}
+\end{frame}
+
+\begin{frame}{Slide example with timeline}
+  \sapTimeline{Time 1}{Lorem ipsum dolor sit amet}%
+              {Time 2}{Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam}%
+              {Time 3}{Quis aute iure reprehenderit}
+\end{frame}
+
+\begin{frame}{References}
+  \begin{itemize}
+    \item \textbf{Papers:}
+      \begin{itemize}\item\end{itemize}
+    \item \textbf{Images:}
+      \begin{itemize}\item\end{itemize}
+    \item \textbf{Slides:}
+      \begin{itemize}
+        \item \url{https://github.com/pietro-nardelli/sapienza-ppt-template}\\
+          {\small\itshape [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)]}
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \sapClosing{Thank you for the attention!}
+\end{frame}
+
+\end{document}
